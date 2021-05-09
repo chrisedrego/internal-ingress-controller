@@ -1,0 +1,367 @@
+---
+# Namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    name: internal-nginx-ingress-controller
+  name: internal-nginx-ingress-controller
+---
+# ServiceAccount
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: internal-nginx-ingress-controller
+  namespace: internal-nginx-ingress-controller
+---
+# Congiguration: Nginx Ingress Controller 
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app: internal-nginx-ingress-controller
+  name: nginx-configuration
+  namespace: internal-nginx-ingress-controller
+---
+# Mime Configuration
+apiVersion: v1
+data:
+  mime.types: |
+    types {
+
+    # Data interchange
+
+    application/atom+xml                  atom;
+    application/json                      json map topojson;
+    application/ld+json                   jsonld;
+    application/rss+xml                   rss;
+    # Normalize to standard type.
+    # https://tools.ietf.org/html/rfc7946#section-12
+    application/geo+json                  geojson;
+    application/xml                       xml;
+    # Normalize to standard type.
+    # https://tools.ietf.org/html/rfc3870#section-2
+    application/rdf+xml                   rdf;
+
+
+    # JavaScript
+
+    # Servers should use text/javascript for JavaScript resources.
+    # https://html.spec.whatwg.org/multipage/scripting.html#scriptingLanguages
+    text/javascript                       js mjs;
+
+
+    # Manifest files
+
+    application/manifest+json             webmanifest;
+    application/x-web-app-manifest+json   webapp;
+    text/cache-manifest                   appcache;
+
+
+    # Media files
+
+    audio/midi                            mid midi kar;
+    audio/mp4                             aac f4a f4b m4a;
+    audio/mpeg                            mp3;
+    audio/ogg                             oga ogg opus;
+    audio/x-realaudio                     ra;
+    audio/x-wav                           wav;
+    audio/x-matroska                      mka;
+    image/bmp                             bmp;
+    image/gif                             gif;
+    image/jpeg                            jpeg jpg;
+    image/jxr                             jxr hdp wdp;
+    image/png                             png;
+    image/svg+xml                         svg svgz;
+    image/tiff                            tif tiff;
+    image/vnd.wap.wbmp                    wbmp;
+    image/webp                            webp;
+    image/x-jng                           jng;
+    video/3gpp                            3gp 3gpp;
+    video/mp4                             f4p f4v m4v mp4;
+    video/mpeg                            mpeg mpg;
+    video/ogg                             ogv;
+    video/quicktime                       mov;
+    video/webm                            webm;
+    video/x-flv                           flv;
+    video/x-mng                           mng;
+    video/x-ms-asf                        asf asx;
+    video/x-ms-wmv                        wmv;
+    video/x-msvideo                       avi;
+    video/x-matroska                      mkv mk3d;
+
+    # Serving `.ico` image files with a different media type
+    # prevents Internet Explorer from displaying then as images:
+    # https://github.com/h5bp/html5-boilerplate/commit/37b5fec090d00f38de64b591bcddcb205aadf8ee
+
+    image/x-icon                          cur ico;
+
+
+    # Microsoft Office
+
+    application/msword                                                         doc;
+    application/vnd.ms-excel                                                   xls;
+    application/vnd.ms-powerpoint                                              ppt;
+    application/vnd.openxmlformats-officedocument.wordprocessingml.document    docx;
+    application/vnd.openxmlformats-officedocument.spreadsheetml.sheet          xlsx;
+    application/vnd.openxmlformats-officedocument.presentationml.presentation  pptx;
+
+
+    # Web fonts
+
+    font/woff                             woff;
+    font/woff2                            woff2;
+    application/vnd.ms-fontobject         eot;
+    font/ttf                              ttf;
+    font/collection                       ttc;
+    font/otf                              otf;
+
+
+    # Other
+
+    application/java-archive              ear jar war;
+    application/mac-binhex40              hqx;
+    application/octet-stream              bin deb dll dmg exe img iso msi msm msp safariextz;
+    application/pdf                       pdf;
+    application/postscript                ai eps ps;
+    application/rtf                       rtf;
+    application/vnd.google-earth.kml+xml  kml;
+    application/vnd.google-earth.kmz      kmz;
+    application/vnd.wap.wmlc              wmlc;
+    application/x-7z-compressed           7z;
+    application/x-bb-appworld             bbaw;
+    application/x-bittorrent              torrent;
+    application/x-chrome-extension        crx;
+    application/x-cocoa                   cco;
+    application/x-java-archive-diff       jardiff;
+    application/x-java-jnlp-file          jnlp;
+    application/x-makeself                run;
+    application/x-opera-extension         oex;
+    application/x-perl                    pl pm;
+    application/x-pilot                   pdb prc;
+    application/x-rar-compressed          rar;
+    application/x-redhat-package-manager  rpm;
+    application/x-sea                     sea;
+    application/x-shockwave-flash         swf;
+    application/x-stuffit                 sit;
+    application/x-tcl                     tcl tk;
+    application/x-x509-ca-cert            crt der pem;
+    application/x-xpinstall               xpi;
+    application/xhtml+xml                 xhtml;
+    application/xslt+xml                  xsl;
+    application/zip                       zip;
+    text/css                              css;
+    text/csv                              csv;
+    text/html                             htm html shtml;
+    text/markdown                         md;
+    text/mathml                           mml;
+    text/plain                            txt;
+    text/vcard                            vcard vcf;
+    text/vnd.rim.location.xloc            xloc;
+    text/vnd.sun.j2me.app-descriptor      jad;
+    text/vnd.wap.wml                      wml;
+    text/vtt                              vtt;
+    text/x-component                      htc;
+
+    }
+kind: ConfigMap
+metadata:
+  name: nginx-mime-types
+  namespace: internal-nginx-ingress-controller
+  labels:
+    app: internal-nginx-ingress-controller
+---
+# TCP Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app: internal-nginx-ingress-controller
+  name: tcp-services
+  namespace: internal-nginx-ingress-controller
+---
+# UDP Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app: internal-nginx-ingress-controller
+  name: udp-services
+  namespace: internal-nginx-ingress-controller
+---
+# ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: internal-nginx-ingress-controller
+    app.kubernetes.io/part-of: internal-nginx-ingress-controller
+  name: internal-nginx-ingress-controller
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  - endpoints
+  - nodes
+  - pods
+  - secrets
+  verbs:
+  - list
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - nodes
+  verbs:
+  - get
+- apiGroups:
+  - ""
+  resources:
+  - services
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - extensions
+  resources:
+  - ingresses
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - create
+  - patch
+- apiGroups:
+  - extensions
+  resources:
+  - ingresses/status
+  verbs:
+  - update
+---
+# ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: internal-nginx-ingress-controller
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: internal-nginx-ingress-controller
+subjects:
+- kind: ServiceAccount
+  name: internal-nginx-ingress-controller
+  namespace: internal-nginx-ingress-controller
+---
+# Service: AWS ILB
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    prometheus.io/port: "10254"
+    prometheus.io/scrape: "true"
+    service.beta.kubernetes.io/aws-load-balancer-internal: "true"
+
+  name: ingress-nginx
+  namespace: internal-nginx-ingress-controller
+
+spec:
+  externalTrafficPolicy: Local
+  # healthCheckNodePort: 30271
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  - name: https
+    port: 443
+    protocol: TCP
+    targetPort: 443
+  selector:
+    app: internal-nginx-ingress-controller
+  type: LoadBalancer
+---
+# Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: internal-nginx-ingress-controller
+  name: internal-nginx-ingress-controller
+  namespace: internal-nginx-ingress-controller
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: internal-nginx-ingress-controller
+  template:
+    metadata:
+
+      annotations:
+        enable-vts-status: "true"
+        prometheus.io/port: "10254"
+        prometheus.io/scrape: "true"
+      labels:
+        app: internal-nginx-ingress-controller
+    spec:
+      containers:
+      - args:
+        - /nginx-ingress-controller
+        - --v=10
+        - --configmap=$(POD_NAMESPACE)/nginx-configuration
+        - --tcp-services-configmap=$(POD_NAMESPACE)/tcp-services
+        - --udp-services-configmap=$(POD_NAMESPACE)/udp-services
+        - --publish-service=$(POD_NAMESPACE)/ingress-nginx
+        - --annotations-prefix=nginx.ingress.kubernetes.io
+        - --enable-ssl-chain-completion=true
+        - --ingress-class=internal
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+        image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.26.1
+        name: internal-nginx-ingress-controller
+        ports:
+        - containerPort: 80
+          name: http
+          protocol: TCP
+        - containerPort: 443
+          name: https
+          protocol: TCP
+        resources: {}
+        securityContext:
+            allowPrivilegeEscalation: true
+            capabilities:
+              add:
+              - NET_BIND_SERVICE
+              drop:
+              - ALL
+            runAsUser: 33
+
+        volumeMounts:
+        - mountPath: /etc/nginx/mime.types
+          name: nginx-mime-types
+          subPath: mime.types
+      nodeSelector: {}
+      securityContext: {}
+      serviceAccount: internal-nginx-ingress-controller
+      serviceAccountName: internal-nginx-ingress-controller
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: nginx-mime-types
+        name: nginx-mime-types
